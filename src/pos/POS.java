@@ -1,9 +1,13 @@
 package pos;
 
+/**
+ *
+ * @author Rocky Shamsul Alam
+ */
 public class POS {
 
     public static void main(String[] args) {
-        new CategoryFrame().setVisible(true);
+        new BrandFrame().setVisible(true);
     }
     
 }

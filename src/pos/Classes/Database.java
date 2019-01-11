@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 
+/**
+ *
+ * @author Rocky Shamsul Alam
+ */
 public class Database {
     
     public Connection con;

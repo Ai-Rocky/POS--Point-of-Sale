@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ *
+ * @author Rocky Shamsul Alam
+ */
 public class VendorFrame extends javax.swing.JFrame {
 
     Database db = new Database();
