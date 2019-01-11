@@ -1,10 +1,11 @@
 package pos;
+import pos.Classes.Database;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import pos.Classes.Database;
 
 public class VendorFrame extends javax.swing.JFrame {
 
@@ -157,7 +158,7 @@ public class VendorFrame extends javax.swing.JFrame {
                                         .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,8 +189,8 @@ public class VendorFrame extends javax.swing.JFrame {
                             .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(111, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         pack();
@@ -206,7 +207,7 @@ public class VendorFrame extends javax.swing.JFrame {
 
         } else {
 
-            JOptionPane.showMessageDialog(null, "Input: Some field is empty !");
+            JOptionPane.showMessageDialog(null, "Plesase fill the empty field !", "Input Validation", JOptionPane.WARNING_MESSAGE);
             return false;
         }
     }
@@ -215,6 +216,7 @@ public class VendorFrame extends javax.swing.JFrame {
         txtName.setText("");
         txtMobile.setText("");
         txtAddress.setText("");
+        Id = -1;
     }
 
     private void vendorList() {
@@ -236,7 +238,7 @@ public class VendorFrame extends javax.swing.JFrame {
             }
             sta.close();
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
 
             JOptionPane.showMessageDialog(null, "vendortList: " + ex);
         }
@@ -255,7 +257,7 @@ public class VendorFrame extends javax.swing.JFrame {
                 vendorList();
                 inputsReset();
 
-            } catch (Exception ex) {
+            } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
         }
@@ -264,7 +266,7 @@ public class VendorFrame extends javax.swing.JFrame {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
 
         if (input()) {
-            
+
             if (Id >= 0) {
 
                 try {
@@ -275,15 +277,16 @@ public class VendorFrame extends javax.swing.JFrame {
                     sta = db.con.createStatement();
                     sta.execute(query);
                     sta.close();
+                    Id = -1;
 
                     vendorList();
                     inputsReset();
 
-                } catch (Exception ex) {
+                } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, ex);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "No row selected !");
+                JOptionPane.showMessageDialog(null, "No row selected !", "Update Vendor", JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
@@ -291,24 +294,30 @@ public class VendorFrame extends javax.swing.JFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
 
         if (Id >= 0) {
+            
+            int reply = JOptionPane.showConfirmDialog(null, "Do you want to delete ?", "Delete Vendor", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                
+                try {
 
-            try {
+                    String query = "delete from tblVendor where Id = '" + Id + "'";
 
-                String query = "delete from tblVendor where Id = '" + Id + "'";
+                    sta = db.con.createStatement();
+                    sta.execute(query);
+                    sta.close();
 
-                sta = db.con.createStatement();
-                sta.execute(query);
-                sta.close();
+                    vendorList();
 
-                vendorList();
-                inputsReset();
-
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex);
+                }
             }
+            Id = -1;
+            inputsReset();
         } else {
-            JOptionPane.showMessageDialog(null, "No row selected !");
+            JOptionPane.showMessageDialog(null, "No row selected !", "Delete Vendor", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tblVendorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVendorMouseClicked
@@ -321,7 +330,7 @@ public class VendorFrame extends javax.swing.JFrame {
             txtMobile.setText(dtm.getValueAt(selectedRow, 2).toString());
             txtAddress.setText(dtm.getValueAt(selectedRow, 3).toString());
         } else {
-            JOptionPane.showMessageDialog(null, "No row selected !");
+            JOptionPane.showMessageDialog(null, "No row selected !", "Modify Row", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_tblVendorMouseClicked
 
@@ -377,7 +386,7 @@ public class VendorFrame extends javax.swing.JFrame {
 
     // Table Variables declaration
     private int selectedRow;
-    private DefaultTableModel dtm;
+    private final DefaultTableModel dtm;
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
