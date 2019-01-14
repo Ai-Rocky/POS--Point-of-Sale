@@ -1,10 +1,13 @@
 package pos;
+
 import pos.Classes.Database;
 
 import java.util.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,10 +18,12 @@ import javax.swing.table.DefaultTableModel;
 public class VendorOrderFrame extends javax.swing.JFrame {
 
     Database db = new Database();
-    Map<Integer,String> vendorMap = new HashMap<>();
-    Map<Integer,String> categoryMap = new HashMap<>();
-    Map<Integer,String> brandMap = new HashMap<>();
-    
+    Map<Integer, String> vendorMap = new HashMap<>();
+    Map<Integer, String> categoryMap = new HashMap<>();
+    Map<Integer, String> brandMap = new HashMap<>();
+    ArrayList CategoryId = new ArrayList();
+    ArrayList BrandId = new ArrayList();
+
     public VendorOrderFrame() {
         initComponents();
         db.dbConnect();
@@ -137,6 +142,16 @@ public class VendorOrderFrame extends javax.swing.JFrame {
 
         cbVendor.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbVendor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Vendor--" }));
+        cbVendor.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbVendorItemStateChanged(evt);
+            }
+        });
+        cbVendor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbVendorMouseClicked(evt);
+            }
+        });
 
         txtDetails.setColumns(20);
         txtDetails.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -347,9 +362,9 @@ public class VendorOrderFrame extends javax.swing.JFrame {
             return false;
         }
     }
-    private void inputsReset() {
 
-        cbVendor.setSelectedIndex(0);
+    private void inputsReset() {
+        //cbVendor.setSelectedIndex(0);
         cbCategory.setSelectedIndex(0);
         cbBrand.setSelectedIndex(0);
         txtName.setText("");
@@ -358,9 +373,9 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         txtDetails.setText("");
         selectedRow = -1;
     }
-    
+
     private void VendorList() {
-        
+
         try {
 
             String query = "select * from tblVendor";
@@ -371,7 +386,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                 vendorMap.put(rs.getInt("Id"), rs.getString("Name"));
                 cbVendor.addItem(rs.getString("Name"));
             }
-            
+
             sta.close();
             System.out.println(vendorMap);
 
@@ -380,8 +395,9 @@ public class VendorOrderFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "vendortList: " + ex);
         }
     }
+
     private void CategoryList() {
-        
+
         try {
 
             String query = "select * from tblCategory";
@@ -392,7 +408,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                 categoryMap.put(rs.getInt("Id"), rs.getString("Name"));
                 cbCategory.addItem(rs.getString("Name"));
             }
-            
+
             sta.close();
             System.out.println(categoryMap);
 
@@ -401,8 +417,9 @@ public class VendorOrderFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "CategoryList: " + ex);
         }
     }
+
     private void BrandList() {
-                
+
         try {
 
             String query = "select * from tblBrand";
@@ -413,7 +430,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                 brandMap.put(rs.getInt("Id"), rs.getString("Name"));
                 cbBrand.addItem(rs.getString("Name"));
             }
-            
+
             sta.close();
             System.out.println(brandMap);
 
@@ -421,6 +438,70 @@ public class VendorOrderFrame extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(null, "BrandList: " + ex);
         }
+    }
+
+    private void getVendorId() {
+
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            for (Map.Entry vm : vendorMap.entrySet()) {
+                if (dtm.getValueAt(i, 0).equals(vm.getValue())) {
+                    VendorId = (int) vm.getKey();
+                }
+            }
+        }
+    }
+
+    private void getCategoryId() {
+
+        CategoryId.clear();
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            for (Map.Entry cm : categoryMap.entrySet()) {
+                if (dtm.getValueAt(i, 1).equals(cm.getValue())) {
+                    CategoryId.add(cm.getKey());
+                }
+            }
+        }
+    }
+
+    private void getBrandId() {
+
+        BrandId.clear();
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            for (Map.Entry bm : brandMap.entrySet()) {
+                if (dtm.getValueAt(i, 2).equals(bm.getValue())) {
+                    BrandId.add(bm.getKey());
+                }
+            }
+        }
+    }
+
+    private Integer SaveOrderId() {
+
+        getVendorId();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        String currentDT = dateFormat.format(date);
+        Integer orderId = null;
+
+        try {
+            String iQuery = "insert into tblvendororder (VendorId, Date) values ('" + VendorId + "', '" + currentDT + "')";
+            sta = db.con.createStatement();
+            sta.execute(iQuery);
+            sta.close();
+
+            String sQuery = "select * from tblvendororder";
+            sta = db.con.createStatement();
+            rs = sta.executeQuery(sQuery);
+
+            if (rs.last()) {
+                orderId = rs.getInt("Id");
+            }
+            sta.close();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return orderId;
     }
 
     private void TotalAmount() {
@@ -434,9 +515,10 @@ public class VendorOrderFrame extends javax.swing.JFrame {
     }
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+
         if (input()) {
             if (selectedRow < 0) {
-                
+
                 Object Product[] = {
                     Vendor,
                     Category,
@@ -447,9 +529,11 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                     Details,
                     Price * Quantity
                 };
-                
+
+                cbVendor.setEnabled(false);
                 dtm.addRow(Product);
                 TotalAmount();
+
             } else {
 
                 JOptionPane.showMessageDialog(null, "You can't add !", "Modify Row", JOptionPane.WARNING_MESSAGE);
@@ -483,7 +567,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
 
         if (input()) {
             if (selectedRow >= 0) {
-                
+
                 dtm.setValueAt(Vendor, selectedRow, 0);
                 dtm.setValueAt(Category, selectedRow, 1);
                 dtm.setValueAt(Brand, selectedRow, 2);
@@ -492,7 +576,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                 dtm.setValueAt(Quantity, selectedRow, 5);
                 dtm.setValueAt(Details, selectedRow, 6);
                 dtm.setValueAt(Price * Quantity, selectedRow, 7);
-                
+
                 inputsReset();
                 TotalAmount();
             } else {
@@ -502,7 +586,51 @@ public class VendorOrderFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
+        
+        Integer orderId = SaveOrderId();
+        getVendorId();
+        getCategoryId();
+        getBrandId();
+
+        if (dtm.getRowCount() > 0) {
+
+            int reply = JOptionPane.showConfirmDialog(null, "Are you sure ?", "Save Order", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+
+                    if (orderId != null) {
+                        
+                        int cId = (int) CategoryId.get(i);
+                        int bId = (int) CategoryId.get(i);
+                        String pName = dtm.getValueAt(i, 3).toString();
+                        String pPrice = dtm.getValueAt(i, 4).toString();
+                        String pQty = dtm.getValueAt(i, 5).toString();
+                        String pDtls = dtm.getValueAt(i, 6).toString();
+
+                        try {
+                            String ipQuery = "insert into tblstock (VendorOrderId, CategoryId, BrandId, ProductName, ProductPrice, ProductQuantity, ProductDetails) values ('" + orderId + "', '" + cId + "', '" + bId + "', '" + pName + "', '" + pPrice + "', '" + pQty + "', '" + pDtls + "')";
+                            sta = db.con.createStatement();
+                            sta.execute(ipQuery);
+                            sta.close();
+                        
+                        } catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(null, ex);
+                        }
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Empty Order !", "Save Order", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+                JOptionPane.showMessageDialog(null, "The order Successfully saved.", "Save Order", JOptionPane.INFORMATION_MESSAGE);
+                dtm.setRowCount(0);
+                inputsReset();
+                TotalAmount();
+                cbVendor.setEnabled(true);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Empty product list !", "Save Order", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCancleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancleActionPerformed
@@ -512,6 +640,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
             dtm.setRowCount(0);
             inputsReset();
             TotalAmount();
+            cbVendor.setEnabled(true);
         }
     }//GEN-LAST:event_btnCancleActionPerformed
 
@@ -519,7 +648,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         selectedRow = tblVendorProduct.getSelectedRow();
 
         if (selectedRow >= 0) {
-            
+
             cbVendor.setSelectedItem(dtm.getValueAt(selectedRow, 0).toString());
             cbCategory.setSelectedItem(dtm.getValueAt(selectedRow, 1).toString());
             cbBrand.setSelectedItem(dtm.getValueAt(selectedRow, 2).toString());
@@ -537,6 +666,14 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         CategoryList();
         BrandList();
     }//GEN-LAST:event_formWindowOpened
+
+    private void cbVendorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbVendorMouseClicked
+
+    }//GEN-LAST:event_cbVendorMouseClicked
+
+    private void cbVendorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbVendorItemStateChanged
+
+    }//GEN-LAST:event_cbVendorItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -581,6 +718,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
     private double Price;
     private int Quantity;
     private String Details;
+    private int VendorId;
 
     // Database Variables declaration
     private Statement sta;
