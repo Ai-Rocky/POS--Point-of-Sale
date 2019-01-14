@@ -1,6 +1,9 @@
 package pos;
+import pos.Classes.Database;
 
+import java.util.*;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -11,8 +14,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class VendorOrderFrame extends javax.swing.JFrame {
 
+    Database db = new Database();
+    Map<Integer,String> vendorMap = new HashMap<>();
+    Map<Integer,String> categoryMap = new HashMap<>();
+    Map<Integer,String> brandMap = new HashMap<>();
+    
     public VendorOrderFrame() {
         initComponents();
+        db.dbConnect();
         dtm = (DefaultTableModel) tblVendorProduct.getModel();
         tblVendorProduct.removeColumn(tblVendorProduct.getColumnModel().getColumn(0));
     }
@@ -43,7 +52,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         cbBrand = new javax.swing.JComboBox<>();
         cbCategory = new javax.swing.JComboBox<>();
-        cbCustomer = new javax.swing.JComboBox<>();
+        cbVendor = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDetails = new javax.swing.JTextArea();
         btnUpdate = new javax.swing.JButton();
@@ -63,7 +72,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Customer:");
+        jLabel2.setText("Vendor:");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Category:");
@@ -121,13 +130,13 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         jLabel8.setText("Product Details:");
 
         cbBrand.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbBrand.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Brand --", "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbBrand.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Brand --" }));
 
         cbCategory.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Category --", "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Category --" }));
 
-        cbCustomer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbCustomer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Customer--", "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbVendor.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cbVendor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Vendor--" }));
 
         txtDetails.setColumns(20);
         txtDetails.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -170,7 +179,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Customer", "Category", "Brand", "Poduct", "Price", "Quantity", "Details", "Total"
+                "Vendor", "Category", "Brand", "Poduct", "Price", "Quantity", "Details", "Total"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -212,7 +221,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
-                                    .addComponent(cbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(cbVendor, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -275,7 +284,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                                     .addComponent(jLabel5))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbVendor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cbBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(20, 20, 20)
@@ -314,7 +323,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
 
     private boolean input() {
 
-        if (cbCustomer.getSelectedIndex() != 0
+        if (cbVendor.getSelectedIndex() != 0
                 && cbCategory.getSelectedIndex() != 0
                 && cbBrand.getSelectedIndex() != 0
                 && !txtName.getText().isEmpty()
@@ -322,7 +331,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                 && !txtQuantity.getText().isEmpty()
                 && !txtDetails.getText().isEmpty()) {
 
-            Customer = cbCustomer.getSelectedItem().toString();
+            Vendor = cbVendor.getSelectedItem().toString();
             Category = cbCategory.getSelectedItem().toString();
             Brand = cbBrand.getSelectedItem().toString();
             Name = txtName.getText();
@@ -338,10 +347,9 @@ public class VendorOrderFrame extends javax.swing.JFrame {
             return false;
         }
     }
-
     private void inputsReset() {
 
-        cbCustomer.setSelectedIndex(0);
+        cbVendor.setSelectedIndex(0);
         cbCategory.setSelectedIndex(0);
         cbBrand.setSelectedIndex(0);
         txtName.setText("");
@@ -349,6 +357,70 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         txtQuantity.setText("");
         txtDetails.setText("");
         selectedRow = -1;
+    }
+    
+    private void VendorList() {
+        
+        try {
+
+            String query = "select * from tblVendor";
+            sta = db.con.createStatement();
+            rs = sta.executeQuery(query);
+
+            while (rs.next()) {
+                vendorMap.put(rs.getInt("Id"), rs.getString("Name"));
+                cbVendor.addItem(rs.getString("Name"));
+            }
+            
+            sta.close();
+            System.out.println(vendorMap);
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "vendortList: " + ex);
+        }
+    }
+    private void CategoryList() {
+        
+        try {
+
+            String query = "select * from tblCategory";
+            sta = db.con.createStatement();
+            rs = sta.executeQuery(query);
+
+            while (rs.next()) {
+                categoryMap.put(rs.getInt("Id"), rs.getString("Name"));
+                cbCategory.addItem(rs.getString("Name"));
+            }
+            
+            sta.close();
+            System.out.println(categoryMap);
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "CategoryList: " + ex);
+        }
+    }
+    private void BrandList() {
+                
+        try {
+
+            String query = "select * from tblBrand";
+            sta = db.con.createStatement();
+            rs = sta.executeQuery(query);
+
+            while (rs.next()) {
+                brandMap.put(rs.getInt("Id"), rs.getString("Name"));
+                cbBrand.addItem(rs.getString("Name"));
+            }
+            
+            sta.close();
+            System.out.println(brandMap);
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "BrandList: " + ex);
+        }
     }
 
     private void TotalAmount() {
@@ -366,7 +438,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
             if (selectedRow < 0) {
                 
                 Object Product[] = {
-                    Customer,
+                    Vendor,
                     Category,
                     Brand,
                     Name,
@@ -375,6 +447,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                     Details,
                     Price * Quantity
                 };
+                
                 dtm.addRow(Product);
                 TotalAmount();
             } else {
@@ -411,7 +484,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         if (input()) {
             if (selectedRow >= 0) {
                 
-                dtm.setValueAt(Customer, selectedRow, 0);
+                dtm.setValueAt(Vendor, selectedRow, 0);
                 dtm.setValueAt(Category, selectedRow, 1);
                 dtm.setValueAt(Brand, selectedRow, 2);
                 dtm.setValueAt(Name, selectedRow, 3);
@@ -447,7 +520,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
 
         if (selectedRow >= 0) {
             
-            cbCustomer.setSelectedItem(dtm.getValueAt(selectedRow, 0).toString());
+            cbVendor.setSelectedItem(dtm.getValueAt(selectedRow, 0).toString());
             cbCategory.setSelectedItem(dtm.getValueAt(selectedRow, 1).toString());
             cbBrand.setSelectedItem(dtm.getValueAt(selectedRow, 2).toString());
             txtName.setText(dtm.getValueAt(selectedRow, 3).toString());
@@ -460,7 +533,9 @@ public class VendorOrderFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_tblVendorProductMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
+        VendorList();
+        CategoryList();
+        BrandList();
     }//GEN-LAST:event_formWindowOpened
 
     /**
@@ -499,8 +574,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
     }
 
     // Input Variables declaration
-    private int Id = -1;
-    private String Customer;
+    private String Vendor;
     private String Category;
     private String Brand;
     private String Name;
@@ -525,7 +599,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cbBrand;
     private javax.swing.JComboBox<String> cbCategory;
-    private javax.swing.JComboBox<String> cbCustomer;
+    private javax.swing.JComboBox<String> cbVendor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
