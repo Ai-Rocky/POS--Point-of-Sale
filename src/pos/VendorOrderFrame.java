@@ -1,5 +1,4 @@
 package pos;
-
 import pos.Classes.Database;
 
 import java.util.*;
@@ -113,7 +112,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel1.setText("Vendor Order");
+        jLabel1.setText("Take Vendor Order");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         txtQuantity.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -271,10 +270,10 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(423, 423, 423)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(381, 381, 381))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
