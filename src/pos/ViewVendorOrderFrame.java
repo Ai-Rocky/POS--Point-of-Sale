@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -110,11 +112,24 @@ public class ViewVendorOrderFrame extends javax.swing.JFrame {
         jLabel10.setText("Vendor Order List:");
 
         txtSearchOrder.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtSearchOrder.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchOrderKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSearchOrderKeyTyped(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Search:");
 
         txtSearchProduct.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtSearchProduct.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchProductKeyReleased(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Search:");
@@ -134,18 +149,17 @@ public class ViewVendorOrderFrame extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtSearchOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel9)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel6)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(0, 0, Short.MAX_VALUE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(130, 130, 130)
                         .addComponent(jLabel1)))
@@ -169,11 +183,11 @@ public class ViewVendorOrderFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel6)))
+                        .addComponent(jLabel6))
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
@@ -190,7 +204,7 @@ public class ViewVendorOrderFrame extends javax.swing.JFrame {
     private void VendorOderList() {
         try {
 
-            String query = "select tblvendororder.Id as OrderId,tblvendor.Name as VendorName,COUNT(tblstock.Id) as TP,SUM(tblstock.ProductPrice * tblstock.ProductQuantity) as TA,Date(tblvendororder.Date) as OrderDate from tblvendor,tblvendororder,tblstock where tblvendor.Id = tblvendororder.VendorId and tblvendororder.Id = tblstock.VendorOrderId";
+            String query = "select tblvendororder.Id as OrderId,tblvendor.Name as VendorName,COUNT(tblstock.Id) as TP,SUM(tblstock.ProductPrice * tblstock.ProductQuantity) as TA,Date(tblvendororder.Date) as OrderDate from tblvendor,tblvendororder,tblstock where tblvendor.Id = tblvendororder.VendorId and tblvendororder.Id = tblstock.VendorOrderId GROUP BY tblstock.VendorOrderId";
             sta = db.con.createStatement();
             rs = sta.executeQuery(query);
             dtmOrder.setRowCount(0);
@@ -259,6 +273,24 @@ public class ViewVendorOrderFrame extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         VendorOderList();
     }//GEN-LAST:event_formWindowOpened
+
+    private void txtSearchOrderKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchOrderKeyTyped
+        
+    }//GEN-LAST:event_txtSearchOrderKeyTyped
+
+    private void txtSearchOrderKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchOrderKeyReleased
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(dtmOrder);
+        tblVendorOrder.setRowSorter(trs);
+        String txt = txtSearchOrder.getText();
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + txt));
+    }//GEN-LAST:event_txtSearchOrderKeyReleased
+
+    private void txtSearchProductKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchProductKeyReleased
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(dtmProduct);
+        tblVendorProduct.setRowSorter(trs);
+        String txt = txtSearchProduct.getText();
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + txt));
+    }//GEN-LAST:event_txtSearchProductKeyReleased
 
     /**
      * @param args the command line arguments
