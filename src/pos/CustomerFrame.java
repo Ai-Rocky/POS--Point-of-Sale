@@ -7,15 +7,12 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Rocky Shamsul Alam
- */
-public class VendorFrame extends javax.swing.JFrame {
+// @author airoc
+public class CustomerFrame extends javax.swing.JFrame {
 
     Database db = new Database();
-
-    public VendorFrame() {
+    
+    public CustomerFrame() {
         initComponents();
         db.dbConnect();
         dtm = (DefaultTableModel) tblVendor.getModel();
@@ -26,9 +23,6 @@ public class VendorFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnInsert = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblVendor = new javax.swing.JTable();
         jSeparator1 = new javax.swing.JSeparator();
@@ -37,41 +31,17 @@ public class VendorFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        btnInsert = new javax.swing.JButton();
         txtMobile = new javax.swing.JTextField();
+        btnUpdate = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JButton();
         txtAddress = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
-            }
-        });
-
-        btnInsert.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        btnInsert.setText("Insert");
-        btnInsert.setPreferredSize(new java.awt.Dimension(90, 30));
-        btnInsert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsertActionPerformed(evt);
-            }
-        });
-
-        btnUpdate.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        btnUpdate.setText("Update");
-        btnUpdate.setPreferredSize(new java.awt.Dimension(90, 30));
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        btnDelete.setText("Delete");
-        btnDelete.setPreferredSize(new java.awt.Dimension(90, 30));
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -108,7 +78,7 @@ public class VendorFrame extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel1.setText("Vendor");
+        jLabel1.setText("Customer");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -119,10 +89,37 @@ public class VendorFrame extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Mobile:");
 
+        btnInsert.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        btnInsert.setText("Insert");
+        btnInsert.setPreferredSize(new java.awt.Dimension(90, 30));
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertActionPerformed(evt);
+            }
+        });
+
         txtMobile.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        btnUpdate.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        btnUpdate.setText("Update");
+        btnUpdate.setPreferredSize(new java.awt.Dimension(90, 30));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Address:");
+
+        btnDelete.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.setPreferredSize(new java.awt.Dimension(90, 30));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -158,14 +155,13 @@ public class VendorFrame extends javax.swing.JFrame {
                                         .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 112, Short.MAX_VALUE))
+                        .addGap(0, 102, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jSeparator1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(376, 376, 376)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabel1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -227,11 +223,11 @@ public class VendorFrame extends javax.swing.JFrame {
         Id = -1;
     }
 
-    private void vendorList() {
+    private void customerList() {
 
         try {
 
-            String query = "select * from tblVendor";
+            String query = "select * from tblCustomer";
             sta = db.con.createStatement();
             rs = sta.executeQuery(query);
             dtm.setRowCount(0);
@@ -251,83 +247,7 @@ public class VendorFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "vendortList: " + ex);
         }
     }
-
-    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-
-        if (input()) {
-            try {
-
-                String query = "insert into tblVendor (Name, Mobile, Address) values ('" + Name + "', '" + Mobile + "', '" + Address + "')";
-                sta = db.con.createStatement();
-                sta.execute(query);
-                sta.close();
-
-                vendorList();
-                inputsReset();
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnInsertActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-
-        if (input()) {
-
-            if (Id >= 0) {
-
-                try {
-
-                    input();
-                    String query = "update tblVendor set Name = '" + Name + "', Mobile = '" + Mobile + "', Address = '" + Address + "' where Id = '" + Id + "'";
-
-                    sta = db.con.createStatement();
-                    sta.execute(query);
-                    sta.close();
-                    Id = -1;
-
-                    vendorList();
-                    inputsReset();
-
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "No row selected !", "Update Vendor", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-
-        if (Id >= 0) {
-            
-            int reply = JOptionPane.showConfirmDialog(null, "Do you want to delete ?", "Delete Vendor", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                
-                try {
-
-                    String query = "delete from tblVendor where Id = '" + Id + "'";
-
-                    sta = db.con.createStatement();
-                    sta.execute(query);
-                    sta.close();
-
-                    vendorList();
-
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex);
-                }
-            }
-            Id = -1;
-            inputsReset();
-        } else {
-            JOptionPane.showMessageDialog(null, "No row selected !", "Delete Vendor", JOptionPane.WARNING_MESSAGE);
-        }
-
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
+    
     private void tblVendorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVendorMouseClicked
 
         selectedRow = tblVendor.getSelectedRow();
@@ -346,10 +266,88 @@ public class VendorFrame extends javax.swing.JFrame {
         inputsReset();
     }//GEN-LAST:event_btnResetActionPerformed
 
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+
+        if (input()) {
+            try {
+
+                String query = "insert into tblCustomer (Name, Mobile, Address) values ('" + Name + "', '" + Mobile + "', '" + Address + "')";
+                sta = db.con.createStatement();
+                sta.execute(query);
+                sta.close();
+
+                customerList();
+                inputsReset();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+
+        if (input()) {
+
+            if (Id >= 0) {
+
+                try {
+
+                    input();
+                    String query = "update tblCustomer set Name = '" + Name + "', Mobile = '" + Mobile + "', Address = '" + Address + "' where Id = '" + Id + "'";
+
+                    sta = db.con.createStatement();
+                    sta.execute(query);
+                    sta.close();
+                    Id = -1;
+
+                    customerList();
+                    inputsReset();
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No row selected !", "Update Customer", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+
+        if (Id >= 0) {
+
+            int reply = JOptionPane.showConfirmDialog(null, "Do you want to delete ?", "Delete Customer", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+
+                try {
+
+                    String query = "delete from tblCustomer where Id = '" + Id + "'";
+
+                    sta = db.con.createStatement();
+                    sta.execute(query);
+                    sta.close();
+
+                    customerList();
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+            }
+            Id = -1;
+            inputsReset();
+        } else {
+            JOptionPane.showMessageDialog(null, "No row selected !", "Delete Customer", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        vendorList();
+        customerList();
     }//GEN-LAST:event_formWindowOpened
 
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -364,20 +362,20 @@ public class VendorFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VendorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VendorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VendorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VendorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VendorFrame().setVisible(true);
+                new CustomerFrame().setVisible(true);
             }
         });
     }
@@ -395,8 +393,7 @@ public class VendorFrame extends javax.swing.JFrame {
     // Table Variables declaration
     private int selectedRow;
     private final DefaultTableModel dtm;
-
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;

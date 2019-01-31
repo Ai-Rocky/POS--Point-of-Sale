@@ -1,0 +1,25 @@
+private void cbCategoryItemStateChanged(java.awt.event.ItemEvent evt) {                                            
+        txtPrice.setEnabled(false);
+        txtQuantity.setEnabled(false);
+        if (cbCategory.getSelectedIndex() != 0) {
+            if (evt.getStateChange() == ItemEvent.SELECTED) {
+                if (cbBrand.getSelectedIndex() != 0) {
+                    //System.out.println(cbBrand.getSelectedItem());
+                    String query = "select Name, ProductName, ProductPrice, ProductQuantity, ProductDetails, (ProductPrice*ProductQuantity) as Total from tblStock,tblCategory,tblBrand where tblStock.CategoryId = tblCategory.Id and tblStock.BrandId = tblBrand.Id and tblCategory.Name = '" + evt.getItem() + "' and tblBrand.Name = '" + cbBrand.getSelectedItem() + "'";
+                    stockList(query);
+                } else {
+                    //System.out.println(evt.getItem());
+                    String query = "select ProductName, ProductPrice, ProductQuantity, ProductDetails, (ProductPrice*ProductQuantity) as Total from tblStock,tblCategory where tblStock.CategoryId = tblCategory.Id and tblCategory.Name = '" + evt.getItem() + "'";
+                    stockList(query);
+                }
+            }
+        } else {
+            if (cbBrand.getSelectedIndex() != 0) {
+                //System.out.println(cbBrand.getSelectedItem());
+                String query = "select ProductName, ProductPrice, ProductQuantity, ProductDetails, (ProductPrice*ProductQuantity) as Total from tblStock,tblBrand where tblStock.BrandId = tblBrand.Id and tblBrand.Name = '" + cbBrand.getSelectedItem() + "'";
+                stockList(query);
+            } else {
+                dtm.setRowCount(0);
+            }
+        }
+    }
