@@ -290,6 +290,7 @@ public class ViewVendorOrderFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "VendorProduct: " + ex);
         }
     }
+    
     private void tblVendorOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVendorOrderMouseClicked
         selectedRow = tblVendorOrder.getSelectedRow();
 
