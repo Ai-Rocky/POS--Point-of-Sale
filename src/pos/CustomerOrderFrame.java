@@ -26,7 +26,8 @@ public class CustomerOrderFrame extends javax.swing.JFrame {
         db.dbConnect();
         dtm = (DefaultTableModel) tblStockProduct.getModel();
         dtmCustomer = (DefaultTableModel) tblCustomerProduct.getModel();
-        //tblStockProduct.removeColumn(tblStockProduct.getColumnModel().getColumn(0));
+        tblStockProduct.removeColumn(tblStockProduct.getColumnModel().getColumn(0));
+        tblCustomerProduct.removeColumn(tblCustomerProduct.getColumnModel().getColumn(0));
     }
 
     /**
@@ -437,7 +438,7 @@ public class CustomerOrderFrame extends javax.swing.JFrame {
 
         double total = 0;
         for (int i = 0; i < tblCustomerProduct.getRowCount(); i++) {
-            total = total + Double.parseDouble((tblCustomerProduct.getValueAt(i, 7).toString()));
+            total = total + Double.parseDouble((tblCustomerProduct.getValueAt(i, 6).toString()));
         }
 
         lblTotal.setText("Total Amount: " + total);

@@ -647,7 +647,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         selectedRow = tblVendorProduct.getSelectedRow();
 
         if (selectedRow >= 0) {
-
+            
             cbVendor.setSelectedItem(dtm.getValueAt(selectedRow, 0).toString());
             cbCategory.setSelectedItem(dtm.getValueAt(selectedRow, 1).toString());
             cbBrand.setSelectedItem(dtm.getValueAt(selectedRow, 2).toString());
