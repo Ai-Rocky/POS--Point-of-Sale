@@ -66,6 +66,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblVendorProduct = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
+        btnBack1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -214,6 +215,14 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Product List:");
 
+        btnBack1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnBack1.setText("Back");
+        btnBack1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBack1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -270,17 +279,24 @@ public class VendorOrderFrame extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(336, 336, 336)
                 .addComponent(jLabel1)
-                .addGap(381, 381, 381))
+                .addGap(18, 18, 18)
+                .addComponent(btnBack1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(11, 11, 11))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnBack1)
+                        .addGap(18, 18, 18)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -664,6 +680,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
         VendorList();
         CategoryList();
         BrandList();
+        this.setLocationRelativeTo(null);
     }//GEN-LAST:event_formWindowOpened
 
     private void cbVendorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbVendorMouseClicked
@@ -673,6 +690,12 @@ public class VendorOrderFrame extends javax.swing.JFrame {
     private void cbVendorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbVendorItemStateChanged
 
     }//GEN-LAST:event_cbVendorItemStateChanged
+
+    private void btnBack1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBack1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new VendorMenuFrame().setVisible(true);
+    }//GEN-LAST:event_btnBack1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -728,6 +751,7 @@ public class VendorOrderFrame extends javax.swing.JFrame {
     private final DefaultTableModel dtm;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack1;
     private javax.swing.JButton btnCancle;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;

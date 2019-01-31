@@ -7,7 +7,7 @@ package pos;
 public class POS {
 
     public static void main(String[] args) {
-        new CustomerOrderFrame().setVisible(true);
+        new LoginFrame().setVisible(true);
     }
     
 }
